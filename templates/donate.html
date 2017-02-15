@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+  <article role="main" style="text-align:center;">
+    <h2>
+      We currently need<strong class="animation"> $<span id="cur">50</span></strong> 
+	  to reach our goal of $<span id=tot>50</span> for the year.
+    </h2>
+    <h3>It takes people like you to keep our organization
+        going. Your donation will help pay for our hosting costs and the
+        services we provide for Arch Linux users.
+    </h3>
+    <form class="form-inline" style="margin-top:1.3em;" role="form" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+      <div class="form-group">
+        <div class="input-group">
+          <input type="text" class="form-control" name="item_name" placeholder="nickname or message">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label for="email">Email address: </label>
+          <input id="email" type="text" class="form-control" name="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <label for="amount">Amount: $</label>
+          <input id="amount" type="text" class="form-control" name="amount" value="10">
+        </div>
+      </div>
+      <input type="hidden" name="charset" value="utf-8">
+      <input type="hidden" name="currency_code" value="USD">
+      <input type="hidden" name="business" value="admin@archwomen.org">
+      <input type="hidden" name="return" value="http://archwomen.org/">
+      <input type="hidden" name="notify_url" value="http://archwomen.org/donate/ipn.php">
+      <input type="hidden" name="cmd" value="_donations">
+      <img alt="paypal" src="https://www.paypalobjects.com/tr_TR/i/scr/pixel.gif" width="1" height="1">
+      <button type="submit" class="btn btn-default">Donate Now</button>
+    </form>
+  </article>
+  <article id="donations" class="donations">
+    <h3 style="text-align:center;">Thank you to all of our donors, we are grateful for your support.</h3>
+    <ol id="donationList"></ol>
+  </article>
+{% endblock %}

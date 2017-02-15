@@ -1,0 +1,9 @@
+From: "Contact form" <contact@archwomen.org>
+To: "Arch Women" <admin@archwomen.org>
+Subject: Contact form: {{ subject }}
+MIME-Version: 1.0
+Content-Type: text/plain
+
+You've recieved a message from {{ name }} <{{ email }}>
+
+{{ message }}

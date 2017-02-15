@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+  <article class="clearfix" role="main">
+   <section class="col-1-2">
+        <h2 role="heading">Welcome!</h2>
+        <p>
+          Arch Linux Women (Arch Women or A-W for short) is an all inclusive 
+          organization of Arch Linux enthusiasts with a focus on helping more 
+          women become involved in the Arch Linux community and 
+          <abbr title="free open source software"> FOSS</abbr>.
+        </p>
+        <p>
+          To this end, we provide a safe space for people of all genders and 
+          backgrounds to share skills, learn, network and socialize. 
+          Anyone with an interest in the project is welcome to participate.
+        </p>
+      </section>
+      <section class="col-2-2">
+        <h2 role="heading">Get Involved</h2>
+        <p>
+          If you'd like to join there are many ways to get started. Come chat with us in <a
+          href="https://kiwiirc.com/client/irc.freenode.net/#archlinux-women">#archlinux-women</a>,
+          join us in one of our online <a href="/wiki/meetings:start">meetings</a>, 
+          subscibe to our <a
+          href="https://lists.archlinux.org/listinfo/arch-women">mailing list</a>, join the <a href="/wiki">wiki</a>,
+          contribute to one of our projects, signal boost on social media or
+          create artwork and blog posts. If you have questions feel free to
+          <a href="/contact">contact</a> us.
+        </p>
+        <p>
+          We are also looking for sponsors and <a href="/donate">donations</a>.
+        </p>
+      </section>
+    </article>
+    <article class="clearfix">
+      <section class="col-1-2">
+        <h2 role="heading">Projects</h2> 
+        <h3><a href="https://wiki.archlinux.org/index.php/Classroom">Classroom</a></h3>
+        <p>
+          Arch Linux Classroom is a project to develop and host classes and
+          teaching materials that can be used by the Arch Linux community.
+        </p>
+        <h3><a href="https://archwomen.org/wiki/projects:internships:start">Internship</a></h3>
+        <p>
+          Internships to work on Arch Linux development: GSoC, OPW.
+        </p>
+        <h3><a href="https://archwomen.org/wiki/projects:mentorship:start">Mentor connection</a></h3>
+        <p>
+          Our goal here is to help people find a mentor who can help 
+          with specialist knowledge.
+        </p>
+      </section>
+      <section class="col-2-2">
+          <h2>Blog</h2>
+          {% for e in entries %}
+            <p><a href="{{ e.link }}">{{ e.title }}</a></p>
+          {% endfor %} 
+          <p><a href="/blog/">Read more</a></p>
+      </section>
+  </article>
+{% endblock %}
