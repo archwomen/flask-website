@@ -6,7 +6,7 @@ The main website for https://archwomen.org
 Installation
 ------------
 
-Install python, flask, feedparser and markdown
+Install python, flask, feedparser, pygments and markdown
 
 Run
 ---
