@@ -56,6 +56,8 @@ def donate():
 #    p.close()
 #    return render_template('submit.html', title=submitted)
 
+#@app.route('/blog/archives')
+
 #@app.route('/blog/<int:year>/<int:month>/<int:day>')                             
 #def daypage(year, month, day):                                                   
 #    y, m, d = str(year), str(month), str(day)                                    
