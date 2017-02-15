@@ -17,3 +17,12 @@ Add Pages
 ---------
 
 Pages are in /content/pages in markdown format
+
+Todo
+----
+
+* events with ical on the main page
+* twitter feed?
+* blog
+* blog archives
+* cache with frozen flask
