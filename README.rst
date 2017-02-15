@@ -26,3 +26,4 @@ Todo
 * blog
 * blog archives
 * cache with frozen flask
+* contact form
