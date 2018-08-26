@@ -16,7 +16,7 @@ from flask import Flask, render_template, Markup, abort, safe_join, request, fla
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
-from jinja2 import evalcontextfilter, Markup, escape
+from jinja2 import evalcontextfilter, escape
 #from flask_frozen import Freezer
 
 ZERO = timedelta(0)
