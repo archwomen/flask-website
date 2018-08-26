@@ -23,12 +23,12 @@ h1 {
   text-align: center;
 }
 hr {
-	border: solid .1em #222222;
+  border: solid .1em #222222;
 }
 blockquote {
-	margin: .5em .5em .5em 2em;
-	padding-left: 1em;
-	border-left: solid .1em #1793d1;
+  margin: .5em .5em .5em 2em;
+  padding-left: 1em;
+  border-left: solid .1em #1793d1;
 }
 ol ol {
     list-style-type: lower-roman;
@@ -134,6 +134,9 @@ nav li {
   display: inline-block;
   text-align: center;
   margin: 0;
+}
+#twitter-widget {
+  max-width: 660px;
 }
 #contact label {
   display: inline-block;

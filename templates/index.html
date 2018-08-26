@@ -57,5 +57,30 @@
           {% endfor %} 
           <p><a href="/blog/">Read more</a></p>
       </section>
+    </article>
+    <article class="clearfix">
+      <section class="col-1-2">
+        <h2>Events</h2>
+        {% for event in calendar %}
+          <p>{{ event | nl2br }}</p>
+        {% endfor %}
+      </section>
+      <section class="col-2-2">
+          <h2>Recent Tweets</h2>
+          <div id="twitter-widget">
+          <a class="twitter-timeline" 
+              data-lang="en" 
+              data-dnt="true" 
+              data-tweet-limit="2" 
+              data-theme="dark" 
+              data-chrome="transparent, noborders, noheader, nofooter, noscrollbar" 
+              data-link-color="#1793d1" 
+              href="https://twitter.com/archwomen">
+              Tweets by archwomen
+          </a>
+          <script async src="//platform.twitter.com/widgets.js" charset="utf-8">
+          </script>
+          </div>
+      </section>
   </article>
 {% endblock %}
