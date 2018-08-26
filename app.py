@@ -100,10 +100,10 @@ def index():
             if component.get('rrule'):
                 reoccur = component.get('rrule').to_ical().decode('utf-8')
                 for item in parse_recurrences(reoccur, startdt, exdate):
-                    events.append("{0} {1}\n {2} - {3}\n"
+                    events.append("{0} {1}\n {2} - {3}"
                                   .format(item, summary, description, location))
             else:
-                events.append("{0}-{1} {2}\n {3} - {4}\n"
+                events.append("{0}-{1} {2}\n {3} - {4}"
                               .format(startdt.strftime("%D %H:%M UTC"),
                                       enddt.strftime("%D %H:%M UTC"),
                                       summary, description, location))
