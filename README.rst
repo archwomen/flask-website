@@ -12,7 +12,8 @@ Run
 ---
 
 gunicorn service file is used to run the flask website but you can run a local
-test with `python -m flask run`
+test with `export FLASK_APP=app.py; python -m flask run` then go to
+`localhost:5000` to see the website.
 
 Add Pages
 ---------
