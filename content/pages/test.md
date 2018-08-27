@@ -1,6 +1,6 @@
-# header1
+# header1 with br: <br>and more text.
 
-paragraph of text
+paragraph of text. Hers is a br: <br>with text after it.
 
 ## header2
 
