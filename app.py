@@ -16,7 +16,7 @@ from flask import Flask, render_template, Markup, abort, safe_join, request, fla
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
-from jinja2 import evalcontextfilter, escape
+from bleach.sanitizer import Cleaner
 #from flask_frozen import Freezer
 
 ZERO = timedelta(0)
@@ -52,30 +52,22 @@ def parse_recurrences(recur_rule, start, exclusions):
         dates.append(rule.strftime("%D %H:%M UTC "))
     return dates
 
-_paragraph_re = re.compile(r'(?:\r\n|\r|\n){2,}')
+def sanitize_html(text):
+    cleaner = Cleaner(tags=['acronym', 'blockquote', 'br', 'table', 'th', 'tr', 'td', 'caption', 'colgroup', 'col', 'thead', 'tbody', 'tfoot'],
+                      attributes={'acronym': ['title']},
+                      strip=False,
+                      strip_comments=True,
+                      filters=None) 
+    sanitized = cleaner.clean(text)
+    return sanitized
 
 app = Flask(__name__)
-
-# For restructured text
-#from docutils.core import publish_parts
-
-#@app.template_filter('rst')
-#def rst_filter(text):
-#    return Markup(publish_parts(source=text, writer_name='html')['body'])
 
 @app.template_filter('markdown')
 def markdown_filter(text):
     """ Convert markdown to html """
-    return Markup(markdown(text, extensions=[CodeHiliteExtension(linenums=False, css_class='highlight'), ExtraExtension()]))
-
-@app.template_filter()
-@evalcontextfilter
-def nl2br(eval_ctx, value):
-    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', '<br>\n') \
-        for p in _paragraph_re.split(escape(value)))
-    if eval_ctx.autoescape:
-        result = Markup(result)
-    return result
+    safe_text = sanitize_html(text)
+    return Markup(markdown(safe_text, extensions=[CodeHiliteExtension(linenums=False, css_class='highlight'), ExtraExtension()]))
 
 @app.route('/pygments.css')
 def pygments_css():
@@ -100,10 +92,10 @@ def index():
             if component.get('rrule'):
                 reoccur = component.get('rrule').to_ical().decode('utf-8')
                 for item in parse_recurrences(reoccur, startdt, exdate):
-                    events.append("{0} {1}\n {2} - {3}"
+                    events.append("{0} {1}<br>{2} - {3}"
                                   .format(item, summary, description, location))
             else:
-                events.append("{0}-{1} {2}\n {3} - {4}"
+                events.append("{0}-{1} {2}<br>{3} - {4}"
                               .format(startdt.strftime("%D %H:%M UTC"),
                                       enddt.strftime("%D %H:%M UTC"),
                                       summary, description, location))

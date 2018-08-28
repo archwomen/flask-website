@@ -6,12 +6,17 @@ The main website for https://archwomen.org
 Installation
 ------------
 
-Install python, flask, feedparser, pygments, markdown, dateutil and icalendar
+Install python, flask, feedparser, pygments, markdown, dateutil, icalendar
+bleach
+
+Pip command:
+
+    pip install flask feedparser pygments markdown dateutil icalendar bleach
 
 Run
 ---
 
-gunicorn service file is used to run the flask website but you can run a local
+On the server gunicorn service file is used to run the flask website but you can run a local
 test with `export FLASK_APP=app.py; python -m flask run` then go to
 `localhost:5000` to see the website.
 
@@ -29,4 +34,4 @@ Todo
 * blog
 * blog archives
 * cache with frozen flask
-* contact form
+* contact email form with spam protection

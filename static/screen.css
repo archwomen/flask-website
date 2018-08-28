@@ -7,10 +7,9 @@ body {
   background-color: #333;
   text-rendering: optimizeLegibility;
 }
-/*#content {
-    width: 70%;
-    margin: 0 auto;
-}*/
+#content {
+    padding: 1em 0 1em 0;
+}
 a:link, a:visited {
   text-decoration:none;
   color:#1793d1;
@@ -29,6 +28,25 @@ blockquote {
   margin: .5em .5em .5em 2em;
   padding-left: 1em;
   border-left: solid .1em #1793d1;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0em;
+    width: 100%;
+    overflow-x: scroll;
+}
+table tbody tr td {
+    padding: 0.5em;
+    border: 1px solid #464646;
+    vertical-align: middle;
+}
+table thead tr {
+  text-align: left;
+  background: #2a2a2a;
+}
+table thead th {
+  padding: 0.5em;
+  border: 1px solid #464646;
 }
 ol ol {
     list-style-type: lower-roman;
@@ -104,6 +122,9 @@ input[type="button"]:hover, input[type="submit"]:hover {
   box-sizing: border-box;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
   overflow: hidden;
+}
+.page {
+  margin: auto 10%;
 }
 #navigation h2 {
   float: left;
@@ -191,6 +212,9 @@ footer {
   #toggle:checked + .toggle:after{
     content: '\f00d';
   }
+  .page {
+    margin: auto 5%;
+  }
 }
 @media only screen and (max-width: 740px) {
   .col-1-2, .col-2-2,
@@ -208,5 +232,8 @@ footer {
   }
   #contact input[type=submit] {
      margin-left: 0;
+  }
+  .page {
+    margin: 0;
   }
 }
