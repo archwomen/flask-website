@@ -1,28 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-  <article>
+  <article class="page">
     <h1>Contact</h1>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-      {% macro render_field(field) %}
-        <dt>{{ field.label }}</dt>
-        <dd>{{ field(**kwargs)|safe }}</dd>
-      {% endmacro %}
-      <form action="{{ url_for('contact') }}" method=post>
-        <dl>
-          {{ render_field(form.name) }}
-          {{ render_field(form.email) }}
-          {{ render_field(form.subject) }}
-          {{ render_field(form.message) }}
-        </dl>
-        {{ form.submit }}
-      </form>
+    <form id="contact" name="contactform" method="post" action="{{ url_for('contact') }}">
+      <label for="name">
+        <h3>Name:</h3>
+      </label>
+      <input type="text" name="name" placeholder="Name"><br />
+      <label for="email">
+        <h3>Email Address:</h3>
+      </label>
+      <input type="email" name="email" required placeholder="you@example.com"><br />
+      <label for="subject">
+        <h3>Subject:</h3>
+      </label>
+      <input type="text" name="subject" placeholder="subject"><br />
+      <label for="message" style="vertical-align:top;">
+        <h3>Message:</h3>
+      </label>
+      <textarea name="message" required id="message" rows="15" cols="40"></textarea><br />
+      <section style="margin-left:10em;">
+        <p>The following three numbers are written out in leet speak. (e.g. the number 10 written as †eπ.)</p>
+        <h3>{{ captcha }}</h3>
+        <p>Please enter the numbers above as standard/arabic numerals 1-9.</p>
+      </section>
+      <label for="captcha">
+        <h3>Anti-spam:</h3>
+      </label>
+      <input type="text" name="captcha" placeholder="answer"><br />
+      <input type="submit" value="Submit">
+    </form>
   <article>
 {% endblock %}

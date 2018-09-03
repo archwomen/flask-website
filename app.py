@@ -1,10 +1,12 @@
 #!/usr/bin/env python2
+# encoding: utf-8
 # -*- coding: utf-8 -*-
 """
 archwomen.org website
 """
 
 import os
+import random
 import codecs
 import re
 import feedparser
@@ -12,10 +14,12 @@ import icalendar
 from datetime import datetime, timedelta, tzinfo
 from dateutil.rrule import *
 from pygments.formatters import HtmlFormatter
-from flask import Flask, render_template, Markup, abort, safe_join, request, flash
+from flask import Flask, render_template, Markup, abort, safe_join, request, session
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
+from markdown.extensions.sane_lists import SaneListExtension
+from markdown.extensions.smarty import SmartyExtension
 from bleach.sanitizer import Cleaner
 #from flask_frozen import Freezer
 
@@ -53,8 +57,18 @@ def parse_recurrences(recur_rule, start, exclusions):
     return dates
 
 def sanitize_html(text):
-    cleaner = Cleaner(tags=['acronym', 'blockquote', 'br', 'table', 'th', 'tr', 'td', 'caption', 'colgroup', 'col', 'thead', 'tbody', 'tfoot'],
-                      attributes={'acronym': ['title']},
+    cleaner = Cleaner(tags=['a', 'abbr', 'b', 'blockquote', 'br', 'caption', 'code',
+                            'col', 'colgroup', 'dd', 'del', 'div', 'dl', 'dt', 'em',
+                            'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5',
+                            'h6', 'hr', 'i', 'img', 'ins', 'li', 'mark', 'ol', 'p',
+                            'pre', 's', 'span', 'strong', 'sub', 'sup', 'table',
+                            'tbody', 'td', 'tfoot', 'th', 'thead', 'tr', 'u', 'ul'],
+                      attributes={'*': ['class', 'id'],
+                                  'abbr': ['title'],
+                                  'a': ['alt', 'href', 'title'],
+                                  'img': ['alt', 'src', 'title']},
+                      styles=[],
+                      protocols=['http', 'https', 'mailto'],
                       strip=False,
                       strip_comments=True,
                       filters=None) 
@@ -62,12 +76,20 @@ def sanitize_html(text):
     return sanitized
 
 app = Flask(__name__)
+app.secret_key = os.getenv('SECRET_KEY')
 
 @app.template_filter('markdown')
 def markdown_filter(text):
     """ Convert markdown to html """
-    safe_text = sanitize_html(text)
-    return Markup(markdown(safe_text, extensions=[CodeHiliteExtension(linenums=False, css_class='highlight'), ExtraExtension()]))
+    md2html = markdown(text, extensions=[CodeHiliteExtension(linenums=False, css_class='highlight'),
+                                         ExtraExtension(),
+                                         SaneListExtension(),
+                                         SmartyExtension(smart_dashes=True,
+                                                         smart_quotes=False,
+                                                         smart_angled_quotes=False,
+                                                         smart_ellipses=False)])
+    safe_html = sanitize_html(md2html)
+    return Markup(safe_html)
 
 @app.route('/pygments.css')
 def pygments_css():
@@ -106,6 +128,42 @@ def index():
 @app.route('/donate/')
 def donate():
     return render_template('donate.html', title="Donate", od=True)
+
+@app.route('/contact/', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        result = request.form
+        user_answer = result['captcha']
+        user_answer = ''.join(user_answer.split())
+        if 'goodanswer' in session:
+            correct_answer = session['goodanswer']
+        if user_answer == correct_answer:
+            msg = render_template("email.txt",
+                                  name=result['name'],
+                                  email=result['email'],
+                                  subject=result['subject'],
+                                  message=result['message'])
+            try:
+                p = os.popen("/usr/bin/sendmail -f contact@archwomen.org -t -i", "w")
+                p.write(msg)
+                p.close()
+            except:
+                return render_template('submit.html', title="Submit", status="There was an error and the email wasn't sent", message=result['message'])
+            session.pop('goodanswer', None)
+            return render_template('submit.html', title="Submit", status="Email sent sucessfully. We will respond back soon.", message=result['message'])
+        else:
+            return render_template('submit.html', title="Submit", status="The captcha was incorrect, please try again.", message=result['message'])
+    numbers = {1: '0N3', 2: '†wo', 3: 'ThГ33', 4: 'f0uГ', 5: 'f1v€', 6: '$|X', 7: 'S€\/EN', 8: 'e;gh+', 9: 'π1N3'}
+    question = ""
+    answer = ""
+    for i in range(3):
+        rannum = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9])
+        question += '{0} '.format(numbers[rannum])
+        answer += str(rannum)
+    if 'goodanswer' in session:
+        session.pop('goodanswer', None)
+    session['goodanswer'] = answer
+    return render_template('contact.html', title="Contact", captcha=unicode(question, 'utf-8'))
 
 #@app.route('/contact/', methods=['POST'])
 #def contact():

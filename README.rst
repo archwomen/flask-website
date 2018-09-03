@@ -20,6 +20,21 @@ On the server gunicorn service file is used to run the flask website but you can
 test with `export FLASK_APP=app.py; python -m flask run` then go to
 `localhost:5000` to see the website.
 
+To allow sessions you need to store a secrete key. You can do this locally by
+setting an enviromental variable `export SECRET_KEY=mysupersecretekey`
+
+On the server this enviromental variable is set by doing the following:
+
+    systemctl edit gunicorn.service
+
+Then you need to edit the file and add:
+
+    Environment="SECRET_KEY=mysupersecretekey"
+
+Obviously with a different key. This key is used for storing the contact form
+capcha to validate it and sessions should NOT be used for anything you actually
+need to keep secure.
+
 Add Pages
 ---------
 
