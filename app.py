@@ -71,7 +71,7 @@ def sanitize_html(text):
                       protocols=['http', 'https', 'mailto'],
                       strip=False,
                       strip_comments=True,
-                      filters=None) 
+                      filters=None)
     sanitized = cleaner.clean(text)
     return sanitized
 
@@ -129,35 +129,13 @@ def index():
 def donate():
     return render_template('donate.html', title="Donate", od=True)
 
-@app.route('/contact/', methods=['GET', 'POST'])
+@app.route('/contact/', methods=['GET'])
 def contact():
-    if request.method == 'POST':
-        result = request.form
-        user_answer = result['captcha']
-        user_answer = ''.join(user_answer.split())
-        if 'goodanswer' in session:
-            correct_answer = session['goodanswer']
-        if user_answer == correct_answer:
-            msg = render_template("email.txt",
-                                  name=result['name'],
-                                  email=result['email'],
-                                  subject=result['subject'],
-                                  message=result['message'])
-            try:
-                p = os.popen("/usr/bin/sendmail -f contact@archwomen.org -t -i", "w")
-                p.write(msg)
-                p.close()
-            except:
-                return render_template('submit.html', title="Submit", status="There was an error and the email wasn't sent", message=result['message'])
-            session.pop('goodanswer', None)
-            return render_template('submit.html', title="Submit", status="Email sent sucessfully. We will respond back soon.", message=result['message'])
-        else:
-            return render_template('submit.html', title="Submit", status="The captcha was incorrect, please try again.", message=result['message'])
     numbers = {1: '0N3', 2: '†wo', 3: 'ThГ33', 4: 'f0uГ', 5: 'f1v€', 6: '$|X', 7: 'S€\/EN', 8: 'e;gh+', 9: 'π1N3'}
     question = ""
     answer = ""
     for i in range(3):
-        rannum = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9])
+        rannum = random.SystemRandom().randint(0, 9)
         question += '{0} '.format(numbers[rannum])
         answer += str(rannum)
     if 'goodanswer' in session:
@@ -165,17 +143,40 @@ def contact():
     session['goodanswer'] = answer
     return render_template('contact.html', title="Contact", captcha=unicode(question, 'utf-8'))
 
-#@app.route('/contact/', methods=['POST'])
-#def contact():
-#    msg = render_template("email.txt",
-#                          name=form.name.data,
-#                          email=form.email.data,
-#                          subject=form.subject.data,
-#                          message=form.message.data)
-#    p = os.popen("/usr/bin/sendmail -f contact@archwomen.org -t -i", "w")
-#    p.write(msg)
-#    p.close()
-#    return render_template('submit.html', title=submitted)
+@app.route('/contact/', methods=['POST'])
+def emailform():
+    result = request.form
+    user_answer = result['captcha']
+    user_answer = ''.join(user_answer.split())
+    if 'goodanswer' in session:
+        correct_answer = session['goodanswer']
+        session.pop('goodanswer', None)
+    else:
+        abort(403)
+    if user_answer == correct_answer:
+        msg = render_template("email.txt",
+                              name=result['name'],
+                              email=result['email'],
+                              subject=result['subject'],
+                              message=result['message'])
+        try:
+            p = os.popen("/usr/bin/sendmail -f contact@archwomen.org -t -i", "w")
+            p.write(msg)
+            p.close()
+        except:
+            return render_template('submit.html',
+                                   title="Submit",
+                                   status="There was an error and the email wasn't sent",
+                                   message=result['message'])
+        return render_template('submit.html',
+                               title="Submit",
+                               status="Email sent sucessfully. We will respond back soon.",
+                               message=result['message'])
+    else:
+        return render_template('submit.html',
+                               title="Submit",
+                               status="The captcha was incorrect, please try again.",
+                               message=result['message'])
 
 #@app.route('/blog/archives')
 
