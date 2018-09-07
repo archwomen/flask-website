@@ -14,7 +14,7 @@ import icalendar
 from datetime import datetime, timedelta, tzinfo
 from dateutil.rrule import *
 from pygments.formatters import HtmlFormatter
-from flask import Flask, render_template, Markup, abort, safe_join, request, session
+from flask import Flask, render_template, Markup, abort, url_for, safe_join, request, session
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
@@ -76,7 +76,19 @@ def sanitize_html(text):
     return sanitized
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY')
+if os.getenv('DEV') and os.environ['DEV'] == "yes":
+    app.config.update(
+        DEBUG=True,
+        TESTING=True,
+        SECRET_KEY="mysupersecretkey",
+        SERVER_NAME="localhost.localdomain:5000"
+    )
+else:
+    app.secret_key = os.getenv('SECRET_KEY')
+    app.config.update(
+        PREFERRED_URL_SCHEME="https",
+        SERVER_NAME="archwomen.org"
+    )
 
 @app.template_filter('markdown')
 def markdown_filter(text):
@@ -87,7 +99,7 @@ def markdown_filter(text):
                                          SmartyExtension(smart_dashes=True,
                                                          smart_quotes=False,
                                                          smart_angled_quotes=False,
-                                                         smart_ellipses=False)])
+                                                          smart_ellipses=False)])
     safe_html = sanitize_html(md2html)
     return Markup(safe_html)
 
@@ -177,6 +189,17 @@ def emailform():
                                title="Submit",
                                status="The captcha was incorrect, please try again.",
                                message=result['message'])
+
+@app.route('/sitemap.xml', methods=['GET'])
+def sitemap():
+    urls = []
+    for root, dirs, files in os.walk("content/pages"):
+        for file in files:
+            if file.endswith(".md"):
+                pagename = os.path.splitext(file)[0]
+                urls.append("{0}{1}".format(url_for("index", _external=True), pagename))
+    sitemap = render_template('sitemap.xml', pagelist=urls)
+    return sitemap, 200, {'Content-Type': 'application/xml'}
 
 #@app.route('/blog/archives')
 
