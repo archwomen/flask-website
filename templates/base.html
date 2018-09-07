@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% if title %}<title>Arch Linux Women | {{ title }}</title>{% else %}<title>Arch Linux Women</title>{% endif %}
+    {% if title %}
+    <title>Arch Linux Women | {{ title }}</title>
+    {% else %}
+    <title>Arch Linux Women</title>
+    {% endif %}
     <meta charset="utf-8">
     <meta name="description" content="An organization that aims to increase women's contributions to Arch Linux">
     <meta name="author" content="Arch Women">
     <meta name="keywords" lang="en-us" content="linux, arch linux, women, arch women, technology, programming, feminism">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="sitemap" type="application/xml" title="Sitemap" href={{ url_for('sitemap', _external=True) }}>
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="http://archwomen.org">{% if title %}

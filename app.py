@@ -14,7 +14,7 @@ import icalendar
 from datetime import datetime, timedelta, tzinfo
 from dateutil.rrule import *
 from pygments.formatters import HtmlFormatter
-from flask import Flask, render_template, Markup, abort, url_for, safe_join, request, session
+from flask import Flask, render_template, Markup, abort, safe_join, url_for, request, session
 from markdown import markdown
 from markdown.extensions.codehilite import CodeHiliteExtension
 from markdown.extensions.extra import ExtraExtension
@@ -76,20 +76,19 @@ def sanitize_html(text):
     return sanitized
 
 app = Flask(__name__)
-if os.getenv('DEV') and os.environ['DEV'] == "yes":
-    app.config.update(
-        DEBUG=True,
-        TESTING=True,
-        SECRET_KEY="mysupersecretkey",
-        SERVER_NAME="localhost.localdomain:5000"
-    )
-else:
-    app.secret_key = os.getenv('SECRET_KEY')
-    app.config.update(
-        TEMPLATES_AUTO_RELOAD=True,
-        PREFERRED_URL_SCHEME="https",
-        SERVER_NAME="archwomen.org"
-    )
+
+class Config(object):
+    DEBUG = False
+    TESTING = False
+
+class ProductionConfig(Config):
+    PREFERRED_URL_SCHEME = "https"
+    SERVER_NAME = "archwomen.org"
+    SECRET_KEY = os.getenv('SECRET_KEY')
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SECRET_KEY = "myverysecretkey"
 
 @app.template_filter('markdown')
 def markdown_filter(text):
@@ -100,7 +99,7 @@ def markdown_filter(text):
                                          SmartyExtension(smart_dashes=True,
                                                          smart_quotes=False,
                                                          smart_angled_quotes=False,
-                                                          smart_ellipses=False)])
+                                                         smart_ellipses=False)])
     safe_html = sanitize_html(md2html)
     return Markup(safe_html)
 
