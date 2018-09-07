@@ -126,12 +126,10 @@ def index():
     return render_template('index.html', entries=feed[0:6], calendar=calevents, title='Home')
 
 @app.route('/donate/')
-@app.route('/donate')
 def donate():
     return render_template('donate.html', title="Donate", od=True)
 
 @app.route('/contact/', methods=['GET'])
-@app.route('/contact', methods=['GET'])
 def contact():
     numbers = {1: '0N3', 2: '†wo', 3: 'ThГ33', 4: 'f0uГ', 5: 'f1v€', 6: '$|X', 7: 'S€\/EN', 8: 'e;gh+', 9: 'π1N3'}
     question = ""
@@ -146,7 +144,6 @@ def contact():
     return render_template('contact.html', title="Contact", captcha=unicode(question, 'utf-8'))
 
 @app.route('/contact/', methods=['POST'])
-@app.route('/contact', methods=['POST'])
 def emailform():
     result = request.form
     user_answer = result['captcha']
@@ -182,8 +179,6 @@ def emailform():
                                message=result['message'])
 
 @app.route('/sitemap/', methods=['GET'])
-@app.route('/sitemap.xml/', methods=['GET'])
-@app.route('/sitemap', methods=['GET'])
 @app.route('/sitemap.xml', methods=['GET'])
 def sitemap():
     urls = []
