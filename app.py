@@ -86,6 +86,7 @@ if os.getenv('DEV') and os.environ['DEV'] == "yes":
 else:
     app.secret_key = os.getenv('SECRET_KEY')
     app.config.update(
+        TEMPLATES_AUTO_RELOAD=True,
         PREFERRED_URL_SCHEME="https",
         SERVER_NAME="archwomen.org"
     )
