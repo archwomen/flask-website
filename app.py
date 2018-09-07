@@ -76,28 +76,16 @@ def sanitize_html(text):
     return sanitized
 
 app = Flask(__name__)
-
-class Config(object):
-    DEBUG = False
-    TESTING = False
-
-class ProductionConfig(Config):
-    PREFERRED_URL_SCHEME = "https"
-    SERVER_NAME = "archwomen.org"
-    SECRET_KEY = os.getenv('SECRET_KEY')
-
-class DevelopmentConfig(Config):
-    DEBUG = True
-    SECRET_KEY = "myverysecretkey"
+app.config.from_object('app_settings')
 
 @app.template_filter('markdown')
 def markdown_filter(text):
     """ Convert markdown to html """
     md2html = markdown(text, extensions=[CodeHiliteExtension(linenums=False, css_class='highlight'),
-                                         ExtraExtension(),
+                                          ExtraExtension(),
                                          SaneListExtension(),
                                          SmartyExtension(smart_dashes=True,
-                                                         smart_quotes=False,
+                                                          smart_quotes=False,
                                                          smart_angled_quotes=False,
                                                          smart_ellipses=False)])
     safe_html = sanitize_html(md2html)
@@ -147,7 +135,7 @@ def contact():
     question = ""
     answer = ""
     for i in range(3):
-        rannum = random.SystemRandom().randint(0, 9)
+        rannum = random.SystemRandom().randint(1, 9)
         question += '{0} '.format(numbers[rannum])
         answer += str(rannum)
     if 'goodanswer' in session:
@@ -167,7 +155,7 @@ def emailform():
         abort(403)
     if user_answer == correct_answer:
         msg = render_template("email.txt",
-                              name=result['name'],
+                               name=result['name'],
                               email=result['email'],
                               subject=result['subject'],
                               message=result['message'])
@@ -177,16 +165,16 @@ def emailform():
             p.close()
         except:
             return render_template('submit.html',
-                                   title="Submit",
+                                    title="Submit",
                                    status="There was an error and the email wasn't sent",
                                    message=result['message'])
         return render_template('submit.html',
-                               title="Submit",
+                                title="Submit",
                                status="Email sent sucessfully. We will respond back soon.",
                                message=result['message'])
     else:
         return render_template('submit.html',
-                               title="Submit",
+                                title="Submit",
                                status="The captcha was incorrect, please try again.",
                                message=result['message'])
 

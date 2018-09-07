@@ -21,7 +21,7 @@ Run
 ---
 
 On the server gunicorn service file is used to run the flask website but you can run a local
-test with `export FLASK_APP=app.py; export DEV=yes; python -m flask run` then go to
+test with `export FLASK_APP=app.py; export FLASK_ENV=development; python -m flask run` then go to
 `localhost.localdomain:5000` to see the website.
 
 To allow sessions on production a secret key enviromental variable should be set
