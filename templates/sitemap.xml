@@ -19,6 +19,15 @@
         <changefreq>monthly</changefreq>
         <priority>0.80</priority>
     </url>
+    {% if bloglist %}
+    {% for url in bloglist %}
+    <url>
+        <loc>{{ url_for("index", _external=True) }}</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.65</priority>
+    </url>
+    {% endfor %}
+    {% endif %}
     <url>
         <loc>{{ url_for("index", _external=True) }}wiki/</loc>
         <changefreq>daily</changefreq>
