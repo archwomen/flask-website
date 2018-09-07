@@ -217,7 +217,6 @@ def sitemap():
 #        abort(404)
 
 @app.route('/<path:webpage>/')
-@app.route('/<path:webpage>')
 def page(webpage):
     page = 'content/pages/%s%s'%(webpage, '.md')
     if os.path.isfile(page):
