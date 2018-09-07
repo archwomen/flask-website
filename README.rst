@@ -6,8 +6,8 @@ The main website for https://archwomen.org
 Installation
 ------------
 
-Install python, flask, feedparser, pygments, markdown, dateutil, icalendar
-bleach
+Install the packagse for python, flask, feedparser, pygments, markdown, dateutil,
+icalendar, bleach
 
 Pip command:
 
