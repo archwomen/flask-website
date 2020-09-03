@@ -3,6 +3,8 @@ Flask Website
 
 The main website for https://archwomen.org
 
+The github repo is a mirror of the official git repo at `git @ archwomen.org`
+
 Installation
 ------------
 
